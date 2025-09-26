@@ -37,10 +37,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer, onDelete, onEdit 
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">{customer.address}</p>
-        <p className="text-sm text-muted-foreground mb-2">Pool Day: {customer.poolDay}</p>
-        {customer.notes && (
-          <p className="text-sm text-gray-700 dark:text-gray-300 italic">Notes: {customer.notes}</p>
-        )}
+        <p className="text-sm text-muted-foreground">Pool Day: {customer.poolDay}</p>
       </CardContent>
     </Card>
   );

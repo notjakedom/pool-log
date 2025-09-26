@@ -77,7 +77,7 @@ const CustomersPage: React.FC = () => {
               <DialogTitle>{editingCustomer ? 'Edit Customer' : 'Add New Customer'}</DialogTitle>
             </DialogHeader>
             <CustomerForm
-              initialData={editingCustomer ? { name: editingCustomer.name, address: editingCustomer.address, poolDay: editingCustomer.poolDay, notes: editingCustomer.notes } : undefined}
+              initialData={editingCustomer ? { name: editingCustomer.name, address: editingCustomer.address, poolDay: editingCustomer.poolDay } : undefined}
               onSubmit={editingCustomer ? handleUpdateCustomer : handleAddCustomer}
               onCancel={handleCloseForm}
             />

@@ -19,7 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea'; // Import Textarea
 import { Customer } from '@/types/customer';
 
 const formSchema = z.object({
@@ -28,7 +27,6 @@ const formSchema = z.object({
   poolDay: z.enum(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], {
     required_error: 'Please select a pool day.',
   }),
-  notes: z.string().optional(), // Added notes field
 });
 
 type CustomerFormValues = z.infer<typeof formSchema>;
@@ -46,7 +44,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ initialData, onSubmit, onCa
       name: '',
       address: '',
       poolDay: 'Monday',
-      notes: '', // Default empty string for notes
     },
   });
 
@@ -99,19 +96,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ initialData, onSubmit, onCa
                   ))}
                 </SelectContent>
               </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Any specific notes for this customer..." {...field} />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}

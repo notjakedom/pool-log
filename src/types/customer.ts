@@ -5,7 +5,7 @@ export type ChemicalUsage = {
   alkalinity: number;
   calciumHardness: number;
   cyanuricAcid: number;
-  notes?: string;
+  notes?: string; // Notes for this specific chemical usage entry
 };
 
 export type Customer = {
@@ -13,6 +13,5 @@ export type Customer = {
   name: string;
   address: string;
   poolDay: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
-  notes?: string; // Added general notes field for the customer
   chemicalHistory: ChemicalUsage[];
 };
