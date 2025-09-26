@@ -1,4 +1,4 @@
-import { Customer } from "@/types/customer";
+import { Customer, ChemicalUsage } from "@/types/customer";
 
 const CUSTOMERS_STORAGE_KEY = "pool_customers";
 
@@ -44,4 +44,20 @@ export const deleteCustomer = (customerId: string): void => {
 export const getCustomerById = (customerId: string): Customer | undefined => {
   const customers = getCustomers();
   return customers.find((c) => c.id === customerId);
+};
+
+export const addChemicalUsageToCustomer = (customerId: string, newUsage: ChemicalUsage): Customer | undefined => {
+  const customers = getCustomers();
+  const customerIndex = customers.findIndex((c) => c.id === customerId);
+
+  if (customerIndex !== -1) {
+    const updatedCustomer = { ...customers[customerIndex] };
+    updatedCustomer.chemicalHistory = [...updatedCustomer.chemicalHistory, newUsage];
+    // Sort history by date, newest first
+    updatedCustomer.chemicalHistory.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    customers[customerIndex] = updatedCustomer;
+    saveCustomers(customers);
+    return updatedCustomer;
+  }
+  return undefined;
 };
