@@ -34,7 +34,13 @@ const CustomerDetailPage: React.FC = () => {
       </div>
 
       <p className="text-lg text-muted-foreground mb-2">{customer.address}</p>
-      <p className="text-lg text-muted-foreground mb-6">Pool Day: {customer.poolDay}</p>
+      <p className="text-lg text-muted-foreground mb-2">Pool Day: {customer.poolDay}</p>
+      {customer.notes && (
+        <div className="mb-6 p-4 bg-muted rounded-md">
+          <h3 className="font-semibold text-lg mb-1">Notes:</h3>
+          <p className="text-muted-foreground">{customer.notes}</p>
+        </div>
+      )}
 
       <h2 className="text-2xl font-semibold mb-4">Chemical Usage History</h2>
       {/* This section will be populated later with calendar and logging features */}
