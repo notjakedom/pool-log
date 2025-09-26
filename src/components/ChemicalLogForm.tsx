@@ -9,7 +9,6 @@ import { CalendarIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -31,11 +30,6 @@ const chemicalLogSchema = z.object({
   date: z.date({
     required_error: "A date for the chemical log is required.",
   }),
-  chlorine: z.coerce.number().min(0, { message: 'Chlorine must be a positive number.' }),
-  ph: z.coerce.number().min(0, { message: 'pH must be a positive number.' }),
-  alkalinity: z.coerce.number().min(0, { message: 'Alkalinity must be a positive number.' }),
-  calciumHardness: z.coerce.number().min(0, { message: 'Calcium Hardness must be a positive number.' }),
-  cyanuricAcid: z.coerce.number().min(0, { message: 'Cyanuric Acid must be a positive number.' }),
   notes: z.string().optional(),
 });
 
@@ -50,13 +44,11 @@ interface ChemicalLogFormProps {
 const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit, onCancel }) => {
   const form = useForm<ChemicalLogFormValues>({
     resolver: zodResolver(chemicalLogSchema),
-    defaultValues: initialData || {
+    defaultValues: initialData ? {
+      date: initialData.date,
+      notes: initialData.notes || '',
+    } : {
       date: new Date(),
-      chlorine: 0,
-      ph: 0,
-      alkalinity: 0,
-      calciumHardness: 0,
-      cyanuricAcid: 0,
       notes: '',
     },
   });
@@ -101,71 +93,6 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
                   />
                 </PopoverContent>
               </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="chlorine"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Chlorine (ppm)</FormLabel>
-              <FormControl>
-                <Input type="number" step="0.1" placeholder="e.g., 3.0" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="ph"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>pH</FormLabel>
-              <FormControl>
-                <Input type="number" step="0.1" placeholder="e.g., 7.4" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="alkalinity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Alkalinity (ppm)</FormLabel>
-              <FormControl>
-                <Input type="number" step="1" placeholder="e.g., 100" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="calciumHardness"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Calcium Hardness (ppm)</FormLabel>
-              <FormControl>
-                <Input type="number" step="1" placeholder="e.g., 250" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="cyanuricAcid"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cyanuric Acid (ppm)</FormLabel>
-              <FormControl>
-                <Input type="number" step="1" placeholder="e.g., 40" {...field} />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}
