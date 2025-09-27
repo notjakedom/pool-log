@@ -5,14 +5,15 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 interface UsePdfGeneratorResult {
-  generatePdf: (element: HTMLElement | null, filename: string) => Promise<void>;
+  generatePdf: (element: HTMLElement | null) => Promise<string | null>;
+  downloadPdf: (pdfDataUrl: string, filename: string) => void;
 }
 
 export function usePdfGenerator(): UsePdfGeneratorResult {
-  const generatePdf = useCallback(async (element: HTMLElement | null, filename: string) => {
+  const generatePdf = useCallback(async (element: HTMLElement | null) => {
     if (!element) {
       console.error("Element for PDF generation not found.");
-      return;
+      return null;
     }
 
     try {
@@ -44,11 +45,21 @@ export function usePdfGenerator(): UsePdfGeneratorResult {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`${filename}.pdf`);
+      return pdf.output('datauristring'); // Return the PDF as a Data URL
     } catch (error) {
       console.error("Error generating PDF:", error);
+      return null;
     }
   }, []);
 
-  return { generatePdf };
+  const downloadPdf = useCallback((pdfDataUrl: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = pdfDataUrl;
+    link.download = `${filename}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, []);
+
+  return { generatePdf, downloadPdf };
 }

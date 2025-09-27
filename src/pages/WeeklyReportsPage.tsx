@@ -7,7 +7,14 @@ import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
-import { usePdfGenerator } from '@/hooks/use-pdf-generator'; // Import the new hook
+import { usePdfGenerator } from '@/hooks/use-pdf-generator';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 type PoolDay = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
 
@@ -24,8 +31,11 @@ interface DayReport {
 const WeeklyReportsPage: React.FC = () => {
   const [weeklyReportData, setWeeklyReportData] = useState<DayReport[]>([]);
   const [currentWeekRange, setCurrentWeekRange] = useState('');
-  const reportRef = useRef<HTMLDivElement>(null); // Ref for the content to be captured
-  const { generatePdf } = usePdfGenerator(); // Use the PDF generator hook
+  const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
+
+  const reportRef = useRef<HTMLDivElement>(null);
+  const { generatePdf, downloadPdf } = usePdfGenerator();
 
   useEffect(() => {
     const today = new Date();
@@ -75,8 +85,18 @@ const WeeklyReportsPage: React.FC = () => {
     setWeeklyReportData(formattedReportData);
   }, []);
 
-  const handleDownloadPdf = () => {
-    generatePdf(reportRef.current, `Weekly_Chemical_Report_${format(new Date(), 'yyyy-MM-dd')}`);
+  const handlePreviewPdf = async () => {
+    const pdfDataUrl = await generatePdf(reportRef.current);
+    if (pdfDataUrl) {
+      setPdfPreviewUrl(pdfDataUrl);
+      setIsPreviewDialogOpen(true);
+    }
+  };
+
+  const handleDownloadFromPreview = () => {
+    if (pdfPreviewUrl) {
+      downloadPdf(pdfPreviewUrl, `Weekly_Chemical_Report_${format(new Date(), 'yyyy-MM-dd')}`);
+    }
   };
 
   const hasAnyLogs = weeklyReportData.some(dayReport => dayReport.customers.length > 0);
@@ -85,26 +105,26 @@ const WeeklyReportsPage: React.FC = () => {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Weekly Chemical Reports</h1>
-        <Button onClick={handleDownloadPdf}>
-          <Download className="mr-2 h-4 w-4" /> Download PDF
+        <Button onClick={handlePreviewPdf}>
+          <Download className="mr-2 h-4 w-4" /> Preview & Download PDF
         </Button>
       </div>
 
-      <div ref={reportRef} className="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"> {/* Content to be captured */}
+      <div ref={reportRef} className="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-3">Week of: {currentWeekRange}</h2>
         <Separator className="mb-4" />
         {!hasAnyLogs ? (
           <p className="text-muted-foreground">No chemical usage recorded for this week across all customers.</p>
         ) : (
-          <div className="space-y-6"> {/* Increased space between day sections */}
+          <div className="space-y-6">
             {weeklyReportData.map((dayReport) => (
               <div key={dayReport.day}>
-                <h3 className="text-2xl font-bold mb-3">{dayReport.day}</h3> {/* Slightly smaller heading for days */}
-                <Separator className="mb-3" /> {/* Slightly less margin for separator */}
+                <h3 className="text-2xl font-bold mb-3">{dayReport.day}</h3>
+                <Separator className="mb-3" />
                 {dayReport.customers.length === 0 ? (
                   <p className="text-muted-foreground mb-4">No customers with logs for {dayReport.day} this week.</p>
                 ) : (
-                  <div className="space-y-2"> {/* Space between customer entries */}
+                  <div className="space-y-2">
                     {dayReport.customers.map(({ customer, usages }) => (
                       <p key={customer.id} className="text-sm">
                         <span className="font-semibold">{customer.name}</span> ({customer.address}):{' '}
@@ -118,6 +138,28 @@ const WeeklyReportsPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* PDF Preview Dialog */}
+      <Dialog open={isPreviewDialogOpen} onOpenChange={setIsPreviewDialogOpen}>
+        <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>PDF Preview</DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 overflow-hidden">
+            {pdfPreviewUrl ? (
+              <iframe src={pdfPreviewUrl} className="w-full h-full border-none" title="PDF Preview" />
+            ) : (
+              <p>Generating PDF...</p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsPreviewDialogOpen(false)}>Close</Button>
+            <Button onClick={handleDownloadFromPreview}>
+              <Download className="mr-2 h-4 w-4" /> Download
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
