@@ -10,10 +10,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import ChemicalLogForm from '@/components/ChemicalLogForm';
-import ChemicalNotesDisplay from '@/components/ChemicalNotesDisplay'; // Import the new component
+import ChemicalLogCard from '@/components/ChemicalLogCard'; // Import the new component
 import { ChemicalUsage, Customer } from '@/types/customer';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -92,14 +91,7 @@ const CustomerDetailPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {customer.chemicalHistory.map((usage, index) => (
-            <Card key={index}>
-              <CardHeader>
-                <CardTitle className="text-lg">{format(new Date(usage.date), 'PPP')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ChemicalNotesDisplay usage={usage} /> {/* Use the new component here */}
-              </CardContent>
-            </Card>
+            <ChemicalLogCard key={index} usage={usage} /> {/* Use the new component here */}
           ))}
         </div>
       )}

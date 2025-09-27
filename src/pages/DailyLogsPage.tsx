@@ -7,12 +7,11 @@ import { Customer, ChemicalUsage } from '@/types/customer';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import ChemicalNotesDisplay from '@/components/ChemicalNotesDisplay'; // Import the new component
+import ChemicalLogCard from '@/components/ChemicalLogCard'; // Import the new component
 
 const DailyLogsPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -82,19 +81,7 @@ const DailyLogsPage: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 gap-4">
               {dailyLogs.map((entry, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <CardTitle className="text-lg">
-                      <Link to={`/customer/${entry.customer.id}`} className="hover:underline">
-                        {entry.customer.name}
-                      </Link>
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">{entry.customer.address}</p>
-                  </CardHeader>
-                  <CardContent>
-                    <ChemicalNotesDisplay usage={entry.usage} /> {/* Use the new component here */}
-                  </CardContent>
-                </Card>
+                <ChemicalLogCard key={index} usage={entry.usage} customer={entry.customer} /> {/* Use the new component here */}
               ))}
             </div>
           )}
