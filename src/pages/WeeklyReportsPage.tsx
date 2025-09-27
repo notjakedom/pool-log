@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getCustomers } from '@/lib/customer-store';
 import { Customer, ChemicalUsage } from '@/types/customer';
 import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
@@ -8,6 +8,9 @@ import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ChemicalNotesDisplay from '@/components/ChemicalNotesDisplay';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
+import { usePdfGenerator } from '@/hooks/use-pdf-generator'; // Import the new hook
 
 type PoolDay = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
 
@@ -24,6 +27,8 @@ interface DayReport {
 const WeeklyReportsPage: React.FC = () => {
   const [weeklyReportData, setWeeklyReportData] = useState<DayReport[]>([]);
   const [currentWeekRange, setCurrentWeekRange] = useState('');
+  const reportRef = useRef<HTMLDivElement>(null); // Ref for the content to be captured
+  const { generatePdf } = usePdfGenerator(); // Use the PDF generator hook
 
   useEffect(() => {
     const today = new Date();
@@ -73,15 +78,22 @@ const WeeklyReportsPage: React.FC = () => {
     setWeeklyReportData(formattedReportData);
   }, []);
 
+  const handleDownloadPdf = () => {
+    generatePdf(reportRef.current, `Weekly_Chemical_Report_${format(new Date(), 'yyyy-MM-dd')}`);
+  };
+
   const hasAnyLogs = weeklyReportData.some(dayReport => dayReport.customers.length > 0);
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex items-center mb-6">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Weekly Chemical Reports</h1>
+        <Button onClick={handleDownloadPdf}>
+          <Download className="mr-2 h-4 w-4" /> Download PDF
+        </Button>
       </div>
 
-      <div className="mb-6">
+      <div ref={reportRef} className="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"> {/* Content to be captured */}
         <h2 className="text-xl font-semibold mb-3">Week of: {currentWeekRange}</h2>
         <Separator className="mb-4" />
         {!hasAnyLogs ? (
