@@ -63,7 +63,7 @@ const ChemicalLogCard: React.FC<ChemicalLogCardProps> = ({ usage, customer, onDe
       <CardContent className="p-0">
         {hasAnyNotes ? (
           <>
-            <p className="px-6 pb-2 text-sm text-muted-foreground italic">Notes available. Click to expand.</p>
+            {/* Removed "Notes available. Click to expand." text */}
             <Accordion type="multiple" className="w-full">
               {chemicalFields.map((field) => (
                 field.value && (
