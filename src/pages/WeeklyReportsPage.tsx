@@ -86,10 +86,14 @@ const WeeklyReportsPage: React.FC = () => {
   }, []);
 
   const handlePreviewPdf = async () => {
+    console.log("WeeklyReportsPage: handlePreviewPdf called. reportRef.current:", reportRef.current);
     const pdfDataUrl = await generatePdf(reportRef.current);
+    console.log("WeeklyReportsPage: PDF Data URL received:", pdfDataUrl ? "Exists" : "Null");
     if (pdfDataUrl) {
       setPdfPreviewUrl(pdfDataUrl);
       setIsPreviewDialogOpen(true);
+    } else {
+      console.error("WeeklyReportsPage: PDF generation failed, no URL to preview.");
     }
   };
 

@@ -11,8 +11,9 @@ interface UsePdfGeneratorResult {
 
 export function usePdfGenerator(): UsePdfGeneratorResult {
   const generatePdf = useCallback(async (element: HTMLElement | null) => {
+    console.log("usePdfGenerator: generatePdf called. Element:", element);
     if (!element) {
-      console.error("Element for PDF generation not found.");
+      console.error("usePdfGenerator: Element for PDF generation not found.");
       return null;
     }
 
@@ -21,8 +22,11 @@ export function usePdfGenerator(): UsePdfGeneratorResult {
         scale: 2, // Increase scale for better resolution
         useCORS: true, // Important if you have images from external sources
       });
+      console.log("usePdfGenerator: Canvas generated:", canvas);
 
       const imgData = canvas.toDataURL('image/png');
+      console.log("usePdfGenerator: Image data generated (first 100 chars):", imgData.substring(0, 100));
+
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'pt',
@@ -44,15 +48,16 @@ export function usePdfGenerator(): UsePdfGeneratorResult {
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-
+      console.log("usePdfGenerator: PDF generated successfully.");
       return pdf.output('datauristring'); // Return the PDF as a Data URL
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      console.error("usePdfGenerator: Error generating PDF:", error);
       return null;
     }
   }, []);
 
   const downloadPdf = useCallback((pdfDataUrl: string, filename: string) => {
+    console.log("usePdfGenerator: downloadPdf called for filename:", filename);
     const link = document.createElement('a');
     link.href = pdfDataUrl;
     link.download = `${filename}.pdf`;
