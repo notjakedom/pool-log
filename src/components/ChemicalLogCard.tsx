@@ -13,7 +13,7 @@ import {
 import { ChemicalUsage, Customer } from '@/types/customer';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
-import DeleteChemicalLogDialog from './DeleteChemicalLogDialog'; // Import the new dialog
+import DeleteChemicalLogDialog from './DeleteChemicalLogDialog';
 
 interface ChemicalLogCardProps {
   usage: ChemicalUsage;
@@ -39,17 +39,15 @@ const ChemicalLogCard: React.FC<ChemicalLogCardProps> = ({ usage, customer, onDe
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-lg">
-            {customer ? (
+            {customer ? ( // If customer prop is provided (DailyLogsPage context)
               <Link to={`/customer/${customer.id}`} className="hover:underline">
-                {customer.name} - {format(new Date(usage.date), 'PPP')}
+                {customer.name}
               </Link>
-            ) : (
+            ) : ( // If customer prop is NOT provided (CustomerDetailPage context)
               format(new Date(usage.date), 'PPP')
             )}
           </CardTitle>
-          {customer && (
-            <p className="text-sm text-muted-foreground">{customer.address}</p>
-          )}
+          {/* Removed customer address as it's redundant in daily logs view */}
         </div>
         {onDeleteLog && (
           <DeleteChemicalLogDialog
@@ -64,30 +62,33 @@ const ChemicalLogCard: React.FC<ChemicalLogCardProps> = ({ usage, customer, onDe
       </CardHeader>
       <CardContent className="p-0">
         {hasAnyNotes ? (
-          <Accordion type="multiple" className="w-full">
-            {chemicalFields.map((field) => (
-              field.value && (
-                <AccordionItem key={field.id} value={field.id} className="border-b px-6">
+          <>
+            <p className="px-6 pb-2 text-sm text-muted-foreground italic">Notes available. Click to expand.</p>
+            <Accordion type="multiple" className="w-full">
+              {chemicalFields.map((field) => (
+                field.value && (
+                  <AccordionItem key={field.id} value={field.id} className="border-b px-6">
+                    <AccordionTrigger className="py-2 text-sm font-medium hover:no-underline">
+                      {field.label} Notes
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-2 pt-0 text-muted-foreground text-sm">
+                      {field.value}
+                    </AccordionContent>
+                  </AccordionItem>
+                )
+              ))}
+              {hasGeneralNotes && (
+                <AccordionItem value="general-notes" className="border-b-0 px-6">
                   <AccordionTrigger className="py-2 text-sm font-medium hover:no-underline">
-                    {field.label} Notes
+                    General Log Notes
                   </AccordionTrigger>
                   <AccordionContent className="pb-2 pt-0 text-muted-foreground text-sm">
-                    {field.value}
+                    {usage.notes}
                   </AccordionContent>
                 </AccordionItem>
-              )
-            ))}
-            {hasGeneralNotes && (
-              <AccordionItem value="general-notes" className="border-b-0 px-6">
-                <AccordionTrigger className="py-2 text-sm font-medium hover:no-underline">
-                  General Log Notes
-                </AccordionTrigger>
-                <AccordionContent className="pb-2 pt-0 text-muted-foreground text-sm">
-                  {usage.notes}
-                </AccordionContent>
-              </AccordionItem>
-            )}
-          </Accordion>
+              )}
+            </Accordion>
+          </>
         ) : (
           <p className="px-6 pb-4 text-sm text-muted-foreground italic">No specific notes for this log.</p>
         )}
