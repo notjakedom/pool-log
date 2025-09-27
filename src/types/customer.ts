@@ -1,11 +1,11 @@
 export type ChemicalUsage = {
   date: string; // YYYY-MM-DD
-  chlorine?: number;
-  ph?: number;
-  alkalinity?: number;
-  calciumHardness?: number;
-  cyanuricAcid?: number;
-  notes?: string; // Notes for this specific chemical usage entry
+  chlorine?: string; // Changed to string for notes
+  ph?: string; // Changed to string for notes
+  alkalinity?: string; // Changed to string for notes
+  calciumHardness?: string; // Changed to string for notes
+  cyanuricAcid?: string; // Changed to string for notes
+  notes?: string; // General notes for this specific chemical usage entry
 };
 
 export type Customer = {

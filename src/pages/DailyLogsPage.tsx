@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { getCustomers } from '@/lib/customer-store';
 import { Customer, ChemicalUsage } from '@/types/customer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, CalendarIcon } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -41,11 +41,7 @@ const DailyLogsPage: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center mb-6">
-        <Link to="/">
-          <Button variant="ghost" size="icon" className="mr-2">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
+        {/* Removed back button as navigation is now in Layout */}
         <h1 className="text-3xl font-bold">Daily Chemical Logs</h1>
       </div>
 
@@ -96,17 +92,15 @@ const DailyLogsPage: React.FC = () => {
                     <p className="text-sm text-muted-foreground">{entry.customer.address}</p>
                   </CardHeader>
                   <CardContent className="text-sm text-muted-foreground">
-                    {entry.usage.notes ? (
-                      <p className="italic">Notes: {entry.usage.notes}</p>
-                    ) : (
+                    {entry.usage.chlorine && <p>Chlorine: {entry.usage.chlorine}</p>}
+                    {entry.usage.ph && <p>pH: {entry.usage.ph}</p>}
+                    {entry.usage.alkalinity && <p>Alkalinity: {entry.usage.alkalinity}</p>}
+                    {entry.usage.calciumHardness && <p>Calcium Hardness: {entry.usage.calciumHardness}</p>}
+                    {entry.usage.cyanuricAcid && <p>Cyanuric Acid: {entry.usage.cyanuricAcid}</p>}
+                    {entry.usage.notes && <p className="italic mt-2">General Notes: {entry.usage.notes}</p>}
+                    {!entry.usage.chlorine && !entry.usage.ph && !entry.usage.alkalinity && !entry.usage.calciumHardness && !entry.usage.cyanuricAcid && !entry.usage.notes && (
                       <p className="italic">No specific notes for this log.</p>
                     )}
-                    {/* Display other chemical values if they exist, though currently optional */}
-                    {entry.usage.chlorine !== undefined && <p>Chlorine: {entry.usage.chlorine} ppm</p>}
-                    {entry.usage.ph !== undefined && <p>pH: {entry.usage.ph}</p>}
-                    {entry.usage.alkalinity !== undefined && <p>Alkalinity: {entry.usage.alkalinity} ppm</p>}
-                    {entry.usage.calciumHardness !== undefined && <p>Calcium Hardness: {entry.usage.calciumHardness} ppm</p>}
-                    {entry.usage.cyanuricAcid !== undefined && <p>Cyanuric Acid: {entry.usage.cyanuricAcid} ppm</p>}
                   </CardContent>
                 </Card>
               ))}

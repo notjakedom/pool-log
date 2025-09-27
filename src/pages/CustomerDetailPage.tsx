@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getCustomerById, addChemicalUsageToCustomer } from '@/lib/customer-store';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, PlusCircle } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -52,7 +52,7 @@ const CustomerDetailPage: React.FC = () => {
         <p className="text-lg text-muted-foreground mb-6">The customer you are looking for does not exist.</p>
         <Link to="/customers">
           <Button>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Customers
+            Back to Customers
           </Button>
         </Link>
       </div>
@@ -62,11 +62,7 @@ const CustomerDetailPage: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center mb-6">
-        <Link to="/customers">
-          <Button variant="ghost" size="icon" className="mr-2">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
+        {/* Removed back button as navigation is now in Layout */}
         <h1 className="text-3xl font-bold">{customer.name}</h1>
       </div>
 
@@ -101,12 +97,15 @@ const CustomerDetailPage: React.FC = () => {
                 <CardTitle className="text-lg">{format(new Date(usage.date), 'PPP')}</CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
-                <p>Chlorine: {usage.chlorine} ppm</p>
-                <p>pH: {usage.ph}</p>
-                <p>Alkalinity: {usage.alkalinity} ppm</p>
-                <p>Calcium Hardness: {usage.calciumHardness} ppm</p>
-                <p>Cyanuric Acid: {usage.cyanuricAcid} ppm</p>
-                {usage.notes && <p className="italic mt-2">Notes: {usage.notes}</p>}
+                {usage.chlorine && <p>Chlorine: {usage.chlorine}</p>}
+                {usage.ph && <p>pH: {usage.ph}</p>}
+                {usage.alkalinity && <p>Alkalinity: {usage.alkalinity}</p>}
+                {usage.calciumHardness && <p>Calcium Hardness: {usage.calciumHardness}</p>}
+                {usage.cyanuricAcid && <p>Cyanuric Acid: {usage.cyanuricAcid}</p>}
+                {usage.notes && <p className="italic mt-2">General Notes: {usage.notes}</p>}
+                {!usage.chlorine && !usage.ph && !usage.alkalinity && !usage.calciumHardness && !usage.cyanuricAcid && !usage.notes && (
+                  <p className="italic">No specific notes for this log.</p>
+                )}
               </CardContent>
             </Card>
           ))}

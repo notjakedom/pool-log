@@ -30,6 +30,11 @@ const chemicalLogSchema = z.object({
   date: z.date({
     required_error: "A date for the chemical log is required.",
   }),
+  chlorine: z.string().optional(),
+  ph: z.string().optional(),
+  alkalinity: z.string().optional(),
+  calciumHardness: z.string().optional(),
+  cyanuricAcid: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -46,9 +51,19 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
     resolver: zodResolver(chemicalLogSchema),
     defaultValues: initialData ? {
       date: initialData.date,
+      chlorine: initialData.chlorine || '',
+      ph: initialData.ph || '',
+      alkalinity: initialData.alkalinity || '',
+      calciumHardness: initialData.calciumHardness || '',
+      cyanuricAcid: initialData.cyanuricAcid || '',
       notes: initialData.notes || '',
     } : {
       date: new Date(),
+      chlorine: '',
+      ph: '',
+      alkalinity: '',
+      calciumHardness: '',
+      cyanuricAcid: '',
       notes: '',
     },
   });
@@ -99,12 +114,77 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
         />
         <FormField
           control={form.control}
+          name="chlorine"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Chlorine Notes</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Added 2 tabs, levels good" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="ph"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>pH Notes</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Slightly high, added acid" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="alkalinity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Alkalinity Notes</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Stable, no adjustment needed" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="calciumHardness"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Calcium Hardness Notes</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Within range" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="cyanuricAcid"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cyanuric Acid Notes</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Checked, looks good" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="notes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Notes for this log</FormLabel>
+              <FormLabel>General Log Notes</FormLabel>
               <FormControl>
-                <Textarea placeholder="Any specific observations or actions taken..." {...field} />
+                <Textarea placeholder="Any overall observations or actions taken..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
