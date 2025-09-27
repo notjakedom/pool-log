@@ -9,15 +9,18 @@ import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
+import { format, getDay } from 'date-fns';
 import { cn } from '@/lib/utils';
 import ChemicalLogCard from '@/components/ChemicalLogCard';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const DailyLogsPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [dailyLogs, setDailyLogs] = useState<
     Array<{ customer: Customer; usage: ChemicalUsage }>
   >([]);
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const [activeDayTab, setActiveDayTab] = useState<string>(daysOfWeek[0]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -33,8 +36,18 @@ const DailyLogsPage: React.FC = () => {
         });
       });
       setDailyLogs(logsForSelectedDate);
+
+      // Set active tab to the selected date's day of the week
+      const dayIndex = getDay(selectedDate); // 0 for Sunday, 1 for Monday, etc.
+      if (dayIndex >= 1 && dayIndex <= 5) { // Monday (1) to Friday (5)
+        setActiveDayTab(daysOfWeek[dayIndex - 1]);
+      } else {
+        setActiveDayTab(daysOfWeek[0]); // Default to Monday if weekend or invalid
+      }
+
     } else {
       setDailyLogs([]);
+      setActiveDayTab(daysOfWeek[0]); // Default to Monday if no date selected
     }
   }, [selectedDate]);
 
@@ -76,15 +89,30 @@ const DailyLogsPage: React.FC = () => {
             Logs for {selectedDate ? format(selectedDate, 'PPP') : 'No date selected'}
           </h2>
           <Separator className="mb-4" />
-          {dailyLogs.length === 0 ? (
-            <p className="text-muted-foreground">No chemical usage recorded for this date.</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {dailyLogs.map((entry, index) => (
-                <ChemicalLogCard key={index} usage={entry.usage} customer={entry.customer} />
+
+          <Tabs value={activeDayTab} onValueChange={setActiveDayTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-5">
+              {daysOfWeek.map((day) => (
+                <TabsTrigger key={day} value={day}>
+                  {day}
+                </TabsTrigger>
               ))}
-            </div>
-          )}
+            </TabsList>
+            {daysOfWeek.map((day) => (
+              <TabsContent key={day} value={day} className="mt-6">
+                <div className="grid grid-cols-1 gap-4">
+                  {dailyLogs
+                    .filter((entry) => entry.customer.poolDay === day)
+                    .map((entry, index) => (
+                      <ChemicalLogCard key={index} usage={entry.usage} customer={entry.customer} />
+                    ))}
+                  {dailyLogs.filter((entry) => entry.customer.poolDay === day).length === 0 && (
+                    <p className="text-muted-foreground col-span-full">No chemical usage recorded for {day} on this date.</p>
+                  )}
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
         </div>
       </div>
     </div>
