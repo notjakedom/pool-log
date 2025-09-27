@@ -25,6 +25,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link to="/daily-logs">
                 <Button variant="ghost">Daily Logs</Button>
               </Link>
+              <Link to="/weekly-reports"> {/* New link */}
+                <Button variant="ghost">Weekly Reports</Button>
+              </Link>
             </nav>
           </div>
         </div>

@@ -8,7 +8,8 @@ import NotFound from "./pages/NotFound";
 import CustomersPage from "./pages/CustomersPage";
 import CustomerDetailPage from "./pages/CustomerDetailPage";
 import DailyLogsPage from "./pages/DailyLogsPage";
-import Layout from "./components/Layout"; // Import the new Layout component
+import WeeklyReportsPage from "./pages/WeeklyReportsPage"; // Import the new page
+import Layout from "./components/Layout";
 
 const queryClient = new QueryClient();
 
@@ -18,12 +19,13 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout> {/* Wrap the Routes with the Layout component */}
+        <Layout>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/customers" element={<CustomersPage />} />
             <Route path="/customer/:customerId" element={<CustomerDetailPage />} />
             <Route path="/daily-logs" element={<DailyLogsPage />} />
+            <Route path="/weekly-reports" element={<WeeklyReportsPage />} /> {/* Add the new route */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
