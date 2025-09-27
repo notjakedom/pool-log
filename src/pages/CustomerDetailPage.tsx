@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { getCustomerById, addChemicalUsageToCustomer } from '@/lib/customer-store';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 
 const CustomerDetailPage: React.FC = () => {
   const { customerId } = useParams<{ customerId: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [customer, setCustomer] = useState<Customer | undefined>(undefined);
   const [isLogFormOpen, setIsLogFormOpen] = useState(false);
 
@@ -26,7 +27,15 @@ const CustomerDetailPage: React.FC = () => {
     if (customerId) {
       setCustomer(getCustomerById(customerId));
     }
-  }, [customerId]);
+
+    // Check for 'openLog' query parameter and open the dialog if present
+    if (searchParams.get('openLog') === 'true') {
+      setIsLogFormOpen(true);
+      // Remove the query parameter to prevent re-opening on refresh or re-render
+      searchParams.delete('openLog');
+      setSearchParams(searchParams, { replace: true }); // Use replace to avoid adding to browser history
+    }
+  }, [customerId, searchParams, setSearchParams]);
 
   const handleLogChemicalUsage = (data: Omit<ChemicalUsage, 'date'> & { date: Date }) => {
     if (customerId) {

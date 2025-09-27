@@ -40,7 +40,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer, onDelete, onEdit 
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-lg font-medium">
-          <Link to={`/customer/${customer.id}`} className="hover:underline">
+          <Link to={`/customer/${customer.id}?openLog=true`} className="hover:underline">
             {customer.name}
           </Link>
         </CardTitle>
