@@ -5,9 +5,6 @@ import { getCustomers } from '@/lib/customer-store';
 import { Customer, ChemicalUsage } from '@/types/customer';
 import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import { Separator } from '@/components/ui/separator';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import ChemicalNotesDisplay from '@/components/ChemicalNotesDisplay';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { usePdfGenerator } from '@/hooks/use-pdf-generator'; // Import the new hook
@@ -99,34 +96,20 @@ const WeeklyReportsPage: React.FC = () => {
         {!hasAnyLogs ? (
           <p className="text-muted-foreground">No chemical usage recorded for this week across all customers.</p>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6"> {/* Increased space between day sections */}
             {weeklyReportData.map((dayReport) => (
               <div key={dayReport.day}>
-                <h3 className="text-2xl font-bold mb-4">{dayReport.day}</h3>
-                <Separator className="mb-4" />
+                <h3 className="text-2xl font-bold mb-3">{dayReport.day}</h3> {/* Slightly smaller heading for days */}
+                <Separator className="mb-3" /> {/* Slightly less margin for separator */}
                 {dayReport.customers.length === 0 ? (
-                  <p className="text-muted-foreground mb-6">No customers with logs for {dayReport.day} this week.</p>
+                  <p className="text-muted-foreground mb-4">No customers with logs for {dayReport.day} this week.</p>
                 ) : (
-                  <div className="grid grid-cols-1 gap-6">
+                  <div className="space-y-2"> {/* Space between customer entries */}
                     {dayReport.customers.map(({ customer, usages }) => (
-                      <Card key={customer.id} className="w-full">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-lg">
-                            <Link to={`/customer/${customer.id}`} className="hover:underline">
-                              {customer.name}
-                            </Link>
-                            <span className="text-sm text-muted-foreground ml-2">({customer.address})</span>
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          {usages.map((usage, index) => (
-                            <div key={`${customer.id}-${usage.date}-${index}`} className="border-t pt-4 first:border-t-0 first:pt-0">
-                              <p className="font-medium text-sm mb-2">{format(new Date(usage.date), 'PPP')}</p>
-                              <ChemicalNotesDisplay usage={usage} />
-                            </div>
-                          ))}
-                        </CardContent>
-                      </Card>
+                      <p key={customer.id} className="text-sm">
+                        <span className="font-semibold">{customer.name}</span> ({customer.address}):{' '}
+                        {usages.map(usage => format(new Date(usage.date), 'MMM dd')).join(', ')}
+                      </p>
                     ))}
                   </div>
                 )}
