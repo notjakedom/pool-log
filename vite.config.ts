@@ -2,10 +2,7 @@ import { defineConfig } from "vite";
 import dyadComponentTagger from "@dyad-sh/react-vite-component-tagger";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import dotenv from 'dotenv'; // Import dotenv
-
-// Load environment variables from .env file
-dotenv.config();
+// Removed dotenv import as we are directly defining the variables
 
 export default defineConfig(() => ({
   server: {
@@ -19,8 +16,8 @@ export default defineConfig(() => ({
     },
   },
   define: {
-    // Expose environment variables to the client-side code
-    'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL),
-    'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY),
+    // Directly define Supabase environment variables
+    'import.meta.env.VITE_SUPABASE_URL': JSON.stringify("https://xjdqchitxqwwepkxwtxw.supabase.co"),
+    'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqZHFjaGl0eHF3d2Vwa3h3dHh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5MjA2NzgsImV4cCI6MjA3NDQ5NjY3OH0.s2IQy-_sp23cBOQkYIvaTkbAl2l9Tgc0UhhcmPE0aB4"),
   },
 }));
