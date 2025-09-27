@@ -14,14 +14,14 @@ import {
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Re-added imports
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const CustomersPage: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; // Re-added daysOfWeek
-  const [activeDayTab, setActiveDayTab] = useState<string>('all'); // Re-added activeDayTab state
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const [activeDayTab, setActiveDayTab] = useState<string>('all');
 
   useEffect(() => {
     const allCustomers = getCustomers();
@@ -30,11 +30,10 @@ const CustomersPage: React.FC = () => {
     } else {
       setCustomers(allCustomers.filter(c => c.poolDay === activeDayTab));
     }
-  }, [activeDayTab]); // Dependency on activeDayTab
+  }, [activeDayTab]);
 
   const handleAddCustomer = (data: Omit<Customer, 'id' | 'chemicalHistory'>) => {
     const newCustomer = addCustomer(data);
-    // Update customers state based on current activeDayTab
     if (activeDayTab === 'all' || newCustomer.poolDay === activeDayTab) {
       setCustomers((prev) => [...prev, newCustomer]);
     }
@@ -57,7 +56,6 @@ const CustomersPage: React.FC = () => {
     if (editingCustomer) {
       const updatedCustomer: Customer = { ...editingCustomer, ...data };
       updateCustomer(updatedCustomer);
-      // Update customers state based on current activeDayTab
       setCustomers((prev) =>
         prev.map((c) => (c.id === updatedCustomer.id ? updatedCustomer : c)).filter(c => activeDayTab === 'all' || c.poolDay === activeDayTab)
       );
