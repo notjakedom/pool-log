@@ -1,4 +1,5 @@
 export type ChemicalUsage = {
+  id: string; // Added unique ID for each chemical usage entry
   date: string; // YYYY-MM-DD
   chlorine?: string; // Changed to string for notes
   ph?: string; // Changed to string for notes

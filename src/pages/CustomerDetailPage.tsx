@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { getCustomerById, addChemicalUsageToCustomer } from '@/lib/customer-store';
+import { getCustomerById, addChemicalUsageToCustomer, deleteChemicalUsageFromCustomer } from '@/lib/customer-store';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import {
@@ -37,9 +37,9 @@ const CustomerDetailPage: React.FC = () => {
     }
   }, [customerId, searchParams, setSearchParams]);
 
-  const handleLogChemicalUsage = (data: Omit<ChemicalUsage, 'date'> & { date: Date }) => {
+  const handleLogChemicalUsage = (data: Omit<ChemicalUsage, 'id' | 'date'> & { date: Date }) => {
     if (customerId) {
-      const newUsage: ChemicalUsage = {
+      const newUsage: Omit<ChemicalUsage, 'id'> = {
         ...data,
         date: format(data.date, 'yyyy-MM-dd'), // Format date to YYYY-MM-DD
       };
@@ -50,6 +50,18 @@ const CustomerDetailPage: React.FC = () => {
         toast.success('Chemical usage logged successfully!');
       } else {
         toast.error('Failed to log chemical usage.');
+      }
+    }
+  };
+
+  const handleDeleteChemicalUsage = (usageId: string) => {
+    if (customerId) {
+      const updatedCustomer = deleteChemicalUsageFromCustomer(customerId, usageId);
+      if (updatedCustomer) {
+        setCustomer(updatedCustomer);
+        toast.info('Chemical log entry deleted.');
+      } else {
+        toast.error('Failed to delete chemical log entry.');
       }
     }
   };
@@ -99,8 +111,8 @@ const CustomerDetailPage: React.FC = () => {
         <p className="text-muted-foreground">No chemical usage recorded yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {customer.chemicalHistory.map((usage, index) => (
-            <ChemicalLogCard key={index} usage={usage} />
+          {customer.chemicalHistory.map((usage) => (
+            <ChemicalLogCard key={usage.id} usage={usage} onDeleteLog={handleDeleteChemicalUsage} />
           ))}
         </div>
       )}

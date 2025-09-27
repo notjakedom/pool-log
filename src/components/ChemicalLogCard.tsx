@@ -11,13 +11,17 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { ChemicalUsage, Customer } from '@/types/customer';
+import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
+import DeleteChemicalLogDialog from './DeleteChemicalLogDialog'; // Import the new dialog
 
 interface ChemicalLogCardProps {
   usage: ChemicalUsage;
   customer?: Customer; // Optional customer prop for DailyLogsPage context
+  onDeleteLog?: (usageId: string) => void; // New prop for delete functionality
 }
 
-const ChemicalLogCard: React.FC<ChemicalLogCardProps> = ({ usage, customer }) => {
+const ChemicalLogCard: React.FC<ChemicalLogCardProps> = ({ usage, customer, onDeleteLog }) => {
   const chemicalFields = [
     { label: 'Chlorine', value: usage.chlorine, id: 'chlorine' },
     { label: 'pH', value: usage.ph, id: 'ph' },
@@ -32,18 +36,30 @@ const ChemicalLogCard: React.FC<ChemicalLogCardProps> = ({ usage, customer }) =>
 
   return (
     <Card className="w-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg">
-          {customer ? (
-            <Link to={`/customer/${customer.id}`} className="hover:underline">
-              {customer.name} - {format(new Date(usage.date), 'PPP')}
-            </Link>
-          ) : (
-            format(new Date(usage.date), 'PPP')
+      <CardHeader className="pb-2 flex flex-row items-center justify-between">
+        <div>
+          <CardTitle className="text-lg">
+            {customer ? (
+              <Link to={`/customer/${customer.id}`} className="hover:underline">
+                {customer.name} - {format(new Date(usage.date), 'PPP')}
+              </Link>
+            ) : (
+              format(new Date(usage.date), 'PPP')
+            )}
+          </CardTitle>
+          {customer && (
+            <p className="text-sm text-muted-foreground">{customer.address}</p>
           )}
-        </CardTitle>
-        {customer && (
-          <p className="text-sm text-muted-foreground">{customer.address}</p>
+        </div>
+        {onDeleteLog && (
+          <DeleteChemicalLogDialog
+            logDate={format(new Date(usage.date), 'PPP')}
+            onConfirm={() => onDeleteLog(usage.id)}
+          >
+            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/90">
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </DeleteChemicalLogDialog>
         )}
       </CardHeader>
       <CardContent className="p-0">

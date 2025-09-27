@@ -46,15 +46,35 @@ export const getCustomerById = (customerId: string): Customer | undefined => {
   return customers.find((c) => c.id === customerId);
 };
 
-export const addChemicalUsageToCustomer = (customerId: string, newUsage: ChemicalUsage): Customer | undefined => {
+export const addChemicalUsageToCustomer = (customerId: string, newUsage: Omit<ChemicalUsage, 'id'>): Customer | undefined => {
   const customers = getCustomers();
   const customerIndex = customers.findIndex((c) => c.id === customerId);
 
   if (customerIndex !== -1) {
     const updatedCustomer = { ...customers[customerIndex] };
-    updatedCustomer.chemicalHistory = [...updatedCustomer.chemicalHistory, newUsage];
+    const usageWithId: ChemicalUsage = {
+      ...newUsage,
+      id: crypto.randomUUID(), // Assign a unique ID to the new usage entry
+    };
+    updatedCustomer.chemicalHistory = [...updatedCustomer.chemicalHistory, usageWithId];
     // Sort history by date, newest first
     updatedCustomer.chemicalHistory.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    customers[customerIndex] = updatedCustomer;
+    saveCustomers(customers);
+    return updatedCustomer;
+  }
+  return undefined;
+};
+
+export const deleteChemicalUsageFromCustomer = (customerId: string, usageId: string): Customer | undefined => {
+  const customers = getCustomers();
+  const customerIndex = customers.findIndex((c) => c.id === customerId);
+
+  if (customerIndex !== -1) {
+    const updatedCustomer = { ...customers[customerIndex] };
+    updatedCustomer.chemicalHistory = updatedCustomer.chemicalHistory.filter(
+      (usage) => usage.id !== usageId
+    );
     customers[customerIndex] = updatedCustomer;
     saveCustomers(customers);
     return updatedCustomer;
