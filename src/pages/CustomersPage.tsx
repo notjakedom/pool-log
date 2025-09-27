@@ -14,14 +14,13 @@ import {
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+// Removed Tabs, TabsContent, TabsList, TabsTrigger imports
 
 const CustomersPage: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const [activeDayTab, setActiveDayTab] = useState<string>(daysOfWeek[0]); // State for active tab
+  // Removed daysOfWeek and activeDayTab state
 
   useEffect(() => {
     setCustomers(getCustomers());
@@ -32,10 +31,6 @@ const CustomersPage: React.FC = () => {
     setCustomers((prev) => [...prev, newCustomer]);
     setIsFormOpen(false);
     toast.success(`Customer "${newCustomer.name}" added successfully.`);
-    // If the new customer's poolDay is not the active tab, switch to it
-    if (newCustomer.poolDay !== activeDayTab) {
-      setActiveDayTab(newCustomer.poolDay);
-    }
   };
 
   const handleDeleteCustomer = (id: string) => {
@@ -59,10 +54,6 @@ const CustomersPage: React.FC = () => {
       setEditingCustomer(null);
       setIsFormOpen(false);
       toast.success(`Customer "${updatedCustomer.name}" updated successfully.`);
-      // If the updated customer's poolDay is not the active tab, switch to it
-      if (updatedCustomer.poolDay !== activeDayTab) {
-        setActiveDayTab(updatedCustomer.poolDay);
-      }
     }
   };
 
@@ -94,34 +85,22 @@ const CustomersPage: React.FC = () => {
         </Dialog>
       </div>
 
-      <Tabs value={activeDayTab} onValueChange={setActiveDayTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          {daysOfWeek.map((day) => (
-            <TabsTrigger key={day} value={day}>
-              {day}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        {daysOfWeek.map((day) => (
-          <TabsContent key={day} value={day} className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {customers
-                .filter((customer) => customer.poolDay === day)
-                .map((customer) => (
-                  <CustomerCard
-                    key={customer.id}
-                    customer={customer}
-                    onDelete={handleDeleteCustomer}
-                    onEdit={handleEditCustomer}
-                  />
-                ))}
-              {customers.filter((customer) => customer.poolDay === day).length === 0 && (
-                <p className="text-muted-foreground col-span-full">No customers scheduled for {day}.</p>
-              )}
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+      <Separator className="mb-4" />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {customers.length === 0 ? (
+          <p className="text-muted-foreground col-span-full">No customers added yet.</p>
+        ) : (
+          customers.map((customer) => (
+            <CustomerCard
+              key={customer.id}
+              customer={customer}
+              onDelete={handleDeleteCustomer}
+              onEdit={handleEditCustomer}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 };
