@@ -24,6 +24,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { ChemicalUsage } from '@/types/customer';
 
 const chemicalLogSchema = z.object({
@@ -112,84 +118,95 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="chlorine"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Chlorine Notes</FormLabel>
-              <FormControl>
-                <Textarea placeholder="e.g., Added 2 tabs, levels good" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="ph"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>pH Notes</FormLabel>
-              <FormControl>
-                <Textarea placeholder="e.g., Slightly high, added acid" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="alkalinity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Alkalinity Notes</FormLabel>
-              <FormControl>
-                <Textarea placeholder="e.g., Stable, no adjustment needed" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="calciumHardness"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Calcium Hardness Notes</FormLabel>
-              <FormControl>
-                <Textarea placeholder="e.g., Within range" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="cyanuricAcid"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cyanuric Acid Notes</FormLabel>
-              <FormControl>
-                <Textarea placeholder="e.g., Checked, looks good" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>General Log Notes</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Any overall observations or actions taken..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="chemical-notes" className="border-b-0">
+            <AccordionTrigger className="py-2 text-base font-semibold hover:no-underline">
+              Chemical Readings & Notes
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4 pt-4">
+              <FormField
+                control={form.control}
+                name="chlorine"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Chlorine Notes</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="e.g., Added 2 tabs, levels good" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="ph"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>pH Notes</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="e.g., Slightly high, added acid" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="alkalinity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Alkalinity Notes</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="e.g., Stable, no adjustment needed" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="calciumHardness"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Calcium Hardness Notes</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="e.g., Within range" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cyanuricAcid"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cyanuric Acid Notes</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="e.g., Checked, looks good" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>General Log Notes</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Any overall observations or actions taken..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
         <div className="flex justify-end space-x-2">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel}>
