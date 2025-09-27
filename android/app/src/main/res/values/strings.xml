@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">lunar-capybara-spin</string>
+    <string name="title_activity_main">lunar-capybara-spin</string>
+    <string name="package_name">com.example.lunarcapybaraspin</string>
+    <string name="custom_url_scheme">com.example.lunarcapybaraspin</string>
+</resources>
