@@ -7,7 +7,7 @@ const Index = () => {
       <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
         <h1 className="text-4xl font-bold mb-4">Dominick Pool Solutions</h1>
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
-          Manage your customers' pool chemical usage with ease. Use the navigation above to get started.
+          Pool Chemical Logbook
         </p>
       </div>
       <MadeWithDyad />
