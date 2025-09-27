@@ -10,9 +10,14 @@ const Index = () => {
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
           Manage your customers' pool chemical usage with ease.
         </p>
-        <Link to="/customers">
-          <Button size="lg" className="text-lg px-8 py-4">Go to Customer Logbook</Button>
-        </Link>
+        <div className="flex flex-col space-y-4">
+          <Link to="/customers">
+            <Button size="lg" className="text-lg px-8 py-4 w-full">Go to Customer Logbook</Button>
+          </Link>
+          <Link to="/daily-logs">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-4 w-full">View Daily Logs</Button>
+          </Link>
+        </div>
       </div>
       <MadeWithDyad />
     </div>
