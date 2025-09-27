@@ -8,8 +8,10 @@ import NotFound from "./pages/NotFound";
 import CustomersPage from "./pages/CustomersPage";
 import CustomerDetailPage from "./pages/CustomerDetailPage";
 import DailyLogsPage from "./pages/DailyLogsPage";
-import WeeklyReportsPage from "./pages/WeeklyReportsPage"; // Import the new page
+import WeeklyReportsPage from "./pages/WeeklyReportsPage";
 import Layout from "./components/Layout";
+import Login from "./pages/Login"; // Import the new Login page
+import { SessionContextProvider } from "./components/SessionContextProvider"; // Import the new SessionContextProvider
 
 const queryClient = new QueryClient();
 
@@ -19,17 +21,18 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout>
+        <SessionContextProvider> {/* Wrap the entire app with SessionContextProvider */}
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/customers" element={<CustomersPage />} />
-            <Route path="/customer/:customerId" element={<CustomerDetailPage />} />
-            <Route path="/daily-logs" element={<DailyLogsPage />} />
-            <Route path="/weekly-reports" element={<WeeklyReportsPage />} /> {/* Add the new route */}
+            <Route path="/login" element={<Login />} /> {/* Add the login route */}
+            <Route path="/" element={<Layout><Index /></Layout>} />
+            <Route path="/customers" element={<Layout><CustomersPage /></Layout>} />
+            <Route path="/customer/:customerId" element={<Layout><CustomerDetailPage /></Layout>} />
+            <Route path="/daily-logs" element={<Layout><DailyLogsPage /></Layout>} />
+            <Route path="/weekly-reports" element={<Layout><WeeklyReportsPage /></Layout>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </Layout>
+        </SessionContextProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
