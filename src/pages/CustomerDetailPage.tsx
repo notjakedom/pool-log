@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import ChemicalLogForm from '@/components/ChemicalLogForm';
-import ChemicalLogCard from '@/components/ChemicalLogCard'; // Import the new component
+import ChemicalLogCard from '@/components/ChemicalLogCard';
 import { ChemicalUsage, Customer } from '@/types/customer';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -91,7 +91,7 @@ const CustomerDetailPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {customer.chemicalHistory.map((usage, index) => (
-            <ChemicalLogCard key={index} usage={usage} /> {/* Use the new component here */}
+            <ChemicalLogCard key={index} usage={usage} />
           ))}
         </div>
       )}
