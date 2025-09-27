@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import ChemicalNotesDisplay from '@/components/ChemicalNotesDisplay'; // Import the new component
 
 const DailyLogsPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -41,7 +42,6 @@ const DailyLogsPage: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center mb-6">
-        {/* Removed back button as navigation is now in Layout */}
         <h1 className="text-3xl font-bold">Daily Chemical Logs</h1>
       </div>
 
@@ -91,16 +91,8 @@ const DailyLogsPage: React.FC = () => {
                     </CardTitle>
                     <p className="text-sm text-muted-foreground">{entry.customer.address}</p>
                   </CardHeader>
-                  <CardContent className="text-sm text-muted-foreground">
-                    {entry.usage.chlorine && <p>Chlorine: {entry.usage.chlorine}</p>}
-                    {entry.usage.ph && <p>pH: {entry.usage.ph}</p>}
-                    {entry.usage.alkalinity && <p>Alkalinity: {entry.usage.alkalinity}</p>}
-                    {entry.usage.calciumHardness && <p>Calcium Hardness: {entry.usage.calciumHardness}</p>}
-                    {entry.usage.cyanuricAcid && <p>Cyanuric Acid: {entry.usage.cyanuricAcid}</p>}
-                    {entry.usage.notes && <p className="italic mt-2">General Notes: {entry.usage.notes}</p>}
-                    {!entry.usage.chlorine && !entry.usage.ph && !entry.usage.alkalinity && !entry.usage.calciumHardness && !entry.usage.cyanuricAcid && !entry.usage.notes && (
-                      <p className="italic">No specific notes for this log.</p>
-                    )}
+                  <CardContent>
+                    <ChemicalNotesDisplay usage={entry.usage} /> {/* Use the new component here */}
                   </CardContent>
                 </Card>
               ))}

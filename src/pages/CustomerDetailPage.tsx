@@ -13,6 +13,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import ChemicalLogForm from '@/components/ChemicalLogForm';
+import ChemicalNotesDisplay from '@/components/ChemicalNotesDisplay'; // Import the new component
 import { ChemicalUsage, Customer } from '@/types/customer';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -62,7 +63,6 @@ const CustomerDetailPage: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center mb-6">
-        {/* Removed back button as navigation is now in Layout */}
         <h1 className="text-3xl font-bold">{customer.name}</h1>
       </div>
 
@@ -96,16 +96,8 @@ const CustomerDetailPage: React.FC = () => {
               <CardHeader>
                 <CardTitle className="text-lg">{format(new Date(usage.date), 'PPP')}</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                {usage.chlorine && <p>Chlorine: {usage.chlorine}</p>}
-                {usage.ph && <p>pH: {usage.ph}</p>}
-                {usage.alkalinity && <p>Alkalinity: {usage.alkalinity}</p>}
-                {usage.calciumHardness && <p>Calcium Hardness: {usage.calciumHardness}</p>}
-                {usage.cyanuricAcid && <p>Cyanuric Acid: {usage.cyanuricAcid}</p>}
-                {usage.notes && <p className="italic mt-2">General Notes: {usage.notes}</p>}
-                {!usage.chlorine && !usage.ph && !usage.alkalinity && !usage.calciumHardness && !usage.cyanuricAcid && !usage.notes && (
-                  <p className="italic">No specific notes for this log.</p>
-                )}
+              <CardContent>
+                <ChemicalNotesDisplay usage={usage} /> {/* Use the new component here */}
               </CardContent>
             </Card>
           ))}
