@@ -119,18 +119,17 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
           )}
         />
 
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="chemical-notes" className="border-b-0">
+        <Accordion type="multiple" className="w-full"> {/* Changed to 'multiple' to allow several to be open */}
+          <AccordionItem value="chlorine-notes">
             <AccordionTrigger className="py-2 text-base font-semibold hover:no-underline">
-              Chemical Readings & Notes
+              Chlorine Notes
             </AccordionTrigger>
-            <AccordionContent className="space-y-4 pt-4">
+            <AccordionContent className="pt-4">
               <FormField
                 control={form.control}
                 name="chlorine"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Chlorine Notes</FormLabel>
                     <FormControl>
                       <Textarea placeholder="e.g., Added 2 tabs, levels good" {...field} />
                     </FormControl>
@@ -138,12 +137,19 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
                   </FormItem>
                 )}
               />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="ph-notes">
+            <AccordionTrigger className="py-2 text-base font-semibold hover:no-underline">
+              pH Notes
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <FormField
                 control={form.control}
                 name="ph"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>pH Notes</FormLabel>
                     <FormControl>
                       <Textarea placeholder="e.g., Slightly high, added acid" {...field} />
                     </FormControl>
@@ -151,12 +157,19 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
                   </FormItem>
                 )}
               />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="alkalinity-notes">
+            <AccordionTrigger className="py-2 text-base font-semibold hover:no-underline">
+              Alkalinity Notes
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <FormField
                 control={form.control}
                 name="alkalinity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Alkalinity Notes</FormLabel>
                     <FormControl>
                       <Textarea placeholder="e.g., Stable, no adjustment needed" {...field} />
                     </FormControl>
@@ -164,12 +177,19 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
                   </FormItem>
                 )}
               />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="calcium-hardness-notes">
+            <AccordionTrigger className="py-2 text-base font-semibold hover:no-underline">
+              Calcium Hardness Notes
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <FormField
                 control={form.control}
                 name="calciumHardness"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Calcium Hardness Notes</FormLabel>
                     <FormControl>
                       <Textarea placeholder="e.g., Within range" {...field} />
                     </FormControl>
@@ -177,12 +197,19 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
                   </FormItem>
                 )}
               />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="cyanuric-acid-notes">
+            <AccordionTrigger className="py-2 text-base font-semibold hover:no-underline">
+              Cyanuric Acid Notes
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <FormField
                 control={form.control}
                 name="cyanuricAcid"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Cyanuric Acid Notes</FormLabel>
                     <FormControl>
                       <Textarea placeholder="e.g., Checked, looks good" {...field} />
                     </FormControl>
@@ -190,12 +217,19 @@ const ChemicalLogForm: React.FC<ChemicalLogFormProps> = ({ initialData, onSubmit
                   </FormItem>
                 )}
               />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="general-notes">
+            <AccordionTrigger className="py-2 text-base font-semibold hover:no-underline">
+              General Log Notes
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <FormField
                 control={form.control}
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>General Log Notes</FormLabel>
                     <FormControl>
                       <Textarea placeholder="Any overall observations or actions taken..." {...field} />
                     </FormControl>
